@@ -1,76 +1,180 @@
-# Welcome to your Lovable project
+# Construction Safety AI System
 
-## Project info
+## Overview
 
-**URL**: https://lovable.dev/projects/9fda1aad-08f9-48e6-a3cb-49711eb6b296
+The Construction Safety AI System is an advanced AI-powered solution designed to monitor and improve safety compliance on construction sites. It uses computer vision and machine learning to detect whether workers are following safety protocols such as wearing PPE (Personal Protective Equipment) and maintaining safe behavior in real time.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+* Real-time safety monitoring using CCTV/webcam
+* PPE detection:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9fda1aad-08f9-48e6-a3cb-49711eb6b296) and start prompting.
+  * Helmet
+  * Safety Vest
+  * Gloves
+  * Safety Shoes
+* Unsafe behavior detection (optional extension)
+* Live alerts for safety violations
+* Bounding box visualization with labels
+* Scalable for multiple camera feeds
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## Tech Stack
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+* Python 3.9+
+* OpenCV
+* YOLOv8 (Ultralytics)
+* PyTorch
+* NumPy
+* FastAPI (for API deployment)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## Architecture
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone https://github.com/Prathmesh-Navale/AI-based-smart-construct-management-system.git
+1. Video input from camera/CCTV
+2. Frame extraction
+3. Preprocessing
+4. YOLO model inference
+5. Detection of PPE / violations
+6. Alert generation (if violation detected)
+7. Display or send results to dashboard/API
 
-# Step 2: Navigate to the project directory.
-cd AI-based-smart-construct-management-system/safe-build-nexus
+---
 
-# Step 3: Install the necessary dependencies.
-npm install
+## Project Structure
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+project/
+│
+├── dataset/
+│   ├── images/
+│   ├── labels/
+│   ├── data.yaml
+│
+├── models/
+│   ├── best.pt
+│
+├── src/
+│   ├── train.py
+│   ├── detect.py
+│   ├── alert.py
+│   ├── utils.py
+│
+├── api/
+│   ├── main.py
+│
+├── runs/
+│   ├── train/
+│
+├── requirements.txt
+└── README.md
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Dataset
 
-**Use GitHub Codespaces**
+* Custom annotated dataset in YOLO format
+* Classes include:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+  * helmet
+  * vest
+  * gloves
+  * shoes
+  * no_helmet (optional)
+  * no_vest (optional)
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+## Installation
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+git clone <repo-url>
+cd project
+pip install -r requirements.txt
+```
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/9fda1aad-08f9-48e6-a3cb-49711eb6b296) and click on Share -> Publish.
+## Training the Model
 
-## Can I connect a custom domain to my Lovable project?
+```bash
+yolo detect train \
+  data=dataset/data.yaml \
+  model=yolov8n.pt \
+  epochs=50 \
+  imgsz=640
+```
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Running the System
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
- 
-# AI-based-smart-construct-management-system
- 
+```bash
+python src/detect.py
+```
+
+Using webcam:
+
+```bash
+yolo detect predict model=models/best.pt source=0
+```
+
+---
+
+## Alert System (Optional)
+
+* Trigger alert if PPE missing
+* Options:
+
+  * Sound alarm (buzzer)
+  * Send notification (API)
+  * Log violation data
+
+---
+
+## Challenges Faced
+
+* Incorrect detection due to poor annotations
+* Class imbalance in dataset
+* Real-time performance optimization
+* False positives in complex backgrounds
+
+---
+
+## Solutions
+
+* Cleaned and validated dataset annotations
+* Balanced dataset with augmentation
+* Optimized confidence and IoU thresholds
+* Used smaller YOLO models for faster inference
+
+---
+
+## Results
+
+* Improved detection accuracy
+* Real-time processing capability
+* Reliable PPE compliance monitoring
+
+---
+
+## Future Improvements
+
+* Multi-camera tracking system
+* Worker identification (face recognition)
+* Dashboard for analytics and reports
+* Edge deployment (Jetson Nano / Raspberry Pi)
+
+---
+
+## Author
+
+Prathmesh Navale
+
+* Portfolio: [https://prathmeshportfolio-peach.vercel.app/](https://prathmeshportfolio-peach.vercel.app/)
+* LinkedIn: [https://www.linkedin.com/in/navaleprathmesh/](https://www.linkedin.com/in/navaleprathmesh/)
